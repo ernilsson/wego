@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/wego
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:passwd}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # Use Firebase public key to validate JWT tokens
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken%40system.gserviceaccount.com
