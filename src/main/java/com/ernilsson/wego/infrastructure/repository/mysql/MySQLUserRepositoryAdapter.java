@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class UserRepositoryWrapper implements UserRepository {
+public class MySQLUserRepositoryAdapter implements UserRepository {
     private final MySQLUserRepository repository;
 
     @Autowired
-    public UserRepositoryWrapper(MySQLUserRepository repository) {
+    public MySQLUserRepositoryAdapter(MySQLUserRepository repository) {
         this.repository = repository;
     }
 

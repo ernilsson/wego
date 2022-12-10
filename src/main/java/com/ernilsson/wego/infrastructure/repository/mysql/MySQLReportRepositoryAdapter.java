@@ -12,11 +12,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class ReportRepositoryWrapper implements ReportRepository {
+public class MySQLReportRepositoryAdapter implements ReportRepository {
     private final MySQLReportRepository repository;
 
     @Autowired
-    public ReportRepositoryWrapper(MySQLReportRepository repository) {
+    public MySQLReportRepositoryAdapter(MySQLReportRepository repository) {
         this.repository = repository;
     }
 

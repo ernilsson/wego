@@ -38,7 +38,6 @@ public class ReportController {
     public ResponseEntity<PublishReportResponse> publish(
             Principal principal, @RequestBody PublishReportRequest request) {
         try {
-            log.info("User principal name: {}", principal.getName());
             User publisher = users.findOrCreate(principal);
             UUID id = reports.createReport(publisher, request.toReport());
             return ResponseEntity
