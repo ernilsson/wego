@@ -1,9 +1,8 @@
 package com.ernilsson.wego.api.rest;
 
-import com.ernilsson.wego.api.request.PublishReportRequest;
-import com.ernilsson.wego.api.response.FindReportResponse;
-import com.ernilsson.wego.api.response.FindReportsResponse;
-import com.ernilsson.wego.api.response.PublishReportResponse;
+import com.ernilsson.wego.api.model.FindReport;
+import com.ernilsson.wego.api.model.FindReports;
+import com.ernilsson.wego.api.model.PublishReport;
 import com.ernilsson.wego.domain.Report;
 import com.ernilsson.wego.domain.User;
 import com.ernilsson.wego.domain.exceptions.InvalidReportException;
@@ -35,35 +34,35 @@ public class ReportController {
     }
 
     @PostMapping
-    public ResponseEntity<PublishReportResponse> publish(
-            Principal principal, @RequestBody PublishReportRequest request) {
+    public ResponseEntity<PublishReport.Response> publish(
+            Principal principal, @RequestBody PublishReport.Request request) {
         try {
             User publisher = users.findOrCreate(principal);
             UUID id = reports.createReport(publisher, request.toReport());
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(new PublishReportResponse(id));
+                    .body(new PublishReport.Response(id));
         } catch (InvalidReportException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid report data");
         }
     }
 
     @GetMapping
-    public ResponseEntity<FindReportsResponse> findByArea(
+    public ResponseEntity<FindReports.Response> findByArea(
             @RequestParam("latitude") double latitude,
             @RequestParam("longitude") double longitude,
             @RequestParam("radius") int radius
     ) {
         final List<Report> reports = this.reports.findReportsInArea(latitude, longitude, radius);
-        return ResponseEntity.ok(FindReportsResponse.from(reports));
+        return ResponseEntity.ok(FindReports.Response.from(reports));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FindReportResponse> findById(@PathVariable UUID id) {
+    public ResponseEntity<FindReport.Response> findById(@PathVariable UUID id) {
         Optional<Report> report = reports.findById(id);
         if (report.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Report not found");
         }
-        return ResponseEntity.ok(FindReportResponse.from(report.get()));
+        return ResponseEntity.ok(FindReport.Response.from(report.get()));
     }
 }
