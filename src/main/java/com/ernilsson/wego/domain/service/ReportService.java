@@ -7,6 +7,7 @@ import com.ernilsson.wego.domain.repository.ReportRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,16 +16,19 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class ReportService {
-    private final ReportRepository repository;
+    private final ReportRepository reports;
+    private final UserService users;
 
-    public ReportService(ReportRepository repository) {
-        this.repository = repository;
+    public ReportService(ReportRepository reports, UserService users) {
+        this.reports = reports;
+        this.users = users;
     }
 
-    public UUID createReport(User publisher, Report report) throws InvalidReportException {
+    public UUID createReport(Principal principal, Report report) throws InvalidReportException {
         try {
+            User publisher = users.findOrCreate(principal);
             report.publish(publisher);
-            Optional<Report> result = repository.save(report);
+            Optional<Report> result = reports.save(report);
             if (result.isEmpty()) {
                 throw new ServiceException("Failed to create report resource");
             }
@@ -36,13 +40,13 @@ public class ReportService {
     }
 
     public List<Report> findReportsInArea(double latitude, double longitude, int radius) {
-        return repository.findInArea(latitude, longitude, radius);
+        return reports.findInArea(latitude, longitude, radius);
     }
 
     public Optional<Report> findById(UUID id) {
         if (Objects.isNull(id)) {
             throw new ServiceException("Cannot find reports by null id");
         }
-        return repository.findById(id);
+        return reports.findById(id);
     }
 }

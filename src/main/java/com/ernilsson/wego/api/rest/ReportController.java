@@ -4,10 +4,8 @@ import com.ernilsson.wego.api.model.FindReport;
 import com.ernilsson.wego.api.model.FindReports;
 import com.ernilsson.wego.api.model.PublishReport;
 import com.ernilsson.wego.domain.Report;
-import com.ernilsson.wego.domain.User;
 import com.ernilsson.wego.domain.exceptions.InvalidReportException;
 import com.ernilsson.wego.domain.service.ReportService;
-import com.ernilsson.wego.domain.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,20 +23,17 @@ import java.util.UUID;
 @RequestMapping("/reports")
 public class ReportController {
     private final ReportService reports;
-    private final UserService users;
 
     @Autowired
-    public ReportController(ReportService reports, UserService users) {
+    public ReportController(ReportService reports) {
         this.reports = reports;
-        this.users = users;
     }
 
     @PostMapping
     public ResponseEntity<PublishReport.Response> publish(
             Principal principal, @RequestBody PublishReport.Request request) {
         try {
-            User publisher = users.findOrCreate(principal);
-            UUID id = reports.createReport(publisher, request.toReport());
+            UUID id = reports.createReport(principal, request.toReport());
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(new PublishReport.Response(id));
