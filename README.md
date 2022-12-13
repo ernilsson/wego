@@ -9,3 +9,8 @@ command.
 ```shell
 $ docker compose -f compose.dev.yml up
 ```
+
+## Documentation
+
+This service is documented using Swagger 2. To visit the documentation, follow the instructions above and then navigate
+to http://localhost:8080/swagger-ui/ in your web browser of choice.
