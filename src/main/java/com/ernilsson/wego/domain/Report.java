@@ -9,6 +9,7 @@ import java.util.UUID;
 @Data
 public class Report {
     private UUID id;
+
     private String note;
     private double latitude;
     private double longitude;
