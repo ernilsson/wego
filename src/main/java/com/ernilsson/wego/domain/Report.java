@@ -17,7 +17,7 @@ public class Report {
     private LocalDateTime createdAt;
 
     public void publish(User user) throws InvalidReportException {
-        if (isInvalid()) {
+        if (user == null || isInvalid()) {
             throw new InvalidReportException();
         }
         this.publisher = user;

@@ -8,7 +8,7 @@ public class User {
     private String id;
 
     public void register(String id) throws InvalidUserStateException {
-        if ("".equals(id)) {
+        if (id == null || "".equals(id)) {
             throw new InvalidUserStateException();
         }
         this.id = id;

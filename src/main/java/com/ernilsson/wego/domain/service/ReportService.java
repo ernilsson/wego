@@ -35,7 +35,7 @@ public class ReportService {
             return result.get().getId();
         } catch (InvalidReportException e) {
             log.warn("Attempted to publish invalid report: {}", report);
-            throw e;
+            throw new ServiceException(e);
         }
     }
 

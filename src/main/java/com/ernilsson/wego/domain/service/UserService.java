@@ -28,8 +28,7 @@ public class UserService {
         try {
             User user = new User();
             user.register(id);
-            user = repository.save(user);
-            return user;
+            return repository.save(user);
         } catch (InvalidUserStateException e) {
             log.error("Failed to create user: ", e);
             throw new ServiceException(e);
